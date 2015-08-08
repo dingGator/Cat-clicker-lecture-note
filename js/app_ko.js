@@ -1,9 +1,47 @@
-var Cat = function(){
-	this.clickCount = ko.observable(0);
-	this.name = ko.observable('Tabby');
-	this.imgSrc = ko.observable('img/cat_picture1.jpg');
-	this.imgAttribution = ko.observable('http://www.flickr.com/photos/big')
-	this.nicknames =ko.observableArray(['Orange', 'Brown', 'Red', 'Blue', 'Green'])
+var initialCats = [
+	{
+		clickCount: 0,
+		name:'Tabby',
+		imgSrc: 'img/cat_picture1.jpg',
+		imgAttribution: 'http://www.flickr.com/photos/big',
+		nicknames:['Orange', 'Brown', 'Red', 'Blue', 'Green']
+	},
+	{
+		clickCount: 0,
+		name:'Crabby',
+		imgSrc: 'img/cat_picture2.jpeg',
+		imgAttribution: 'http://www.flickr.com/photos/big',
+		nicknames:['Messy']
+	},
+	{
+		clickCount: 0,
+		name:'Labby',
+		imgSrc: 'img/cat_picture3.jpeg',
+		imgAttribution: 'http://www.flickr.com/photos/big',
+		nicknames:['Sissssy']
+	},
+	{
+		clickCount: 0,
+		name:'Tiger',
+		imgSrc: 'img/cat_picture4.jpeg',
+		imgAttribution: 'http://www.flickr.com/photos/big',
+		nicknames:['Stripy']
+	},
+	{
+		clickCount: 0,
+		name:'Shadowy',
+		imgSrc: 'img/cat_picture5.jpeg',
+		imgAttribution: 'http://www.flickr.com/photos/big',
+		nicknames:['Noisy']
+	},
+
+]
+var Cat = function(data){
+	this.clickCount = ko.observable(data.clickCount);
+	this.name = ko.observable(data.name);
+	this.imgSrc = ko.observable(data.imgSrc);
+	this.imgAttribution = ko.observable(data.imgAttribution);
+	this.nicknames =ko.observableArray(data.nicknames);
 
 	this.title= ko.computed(function(){
 		var title;
@@ -24,12 +62,25 @@ var Cat = function(){
 		return title;
 
 	}, this);
-}
+}	// Make the cats show up in a list
+// make current cat change when you click on a cat on the listz,
+// give yourself a high-five
 var ViewModel = function() {
-	this.currentCat = ko.observable(new Cat());
+	var self = this;
+
+	this.catList = ko.observableArray([]);
+
+	initialCats.forEach(function(catItem){
+		self.catList.push(new Cat(catItem));
+	});
+	this.currentCat = ko.observable(this.catList()[0]);
 
 	this.incrementCounter = function(){
-		this.clickCount(this.clickCount() +1);
+		self.currentCat().clickCount(self.currentCat().clickCount() +1);
 	};
+	this.setCat =function(clickedCat) {
+	self.currentCat(clickedCat);
+
+};
 };
 ko.applyBindings(new ViewModel());
